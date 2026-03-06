@@ -10,4 +10,8 @@ wheels/
 .venv
 
 # Generated mesh files
+# Generated OBJ files in default output folder
+! output/**/*.obj
+
+
 *.obj
