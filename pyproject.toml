@@ -1,7 +1,14 @@
 [project]
 name = "steel-section-obj-builder"
 version = "0.1.0"
-description = "Add your description here"
+description = "CLI generator for extruded steel section OBJ models from CSV properties"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "sectionproperties>=3.9.0",
+    "typer>=0.12.0",
+    "tqdm>=4.66.0",
+]
+
+[project.scripts]
+steel-sections = "main:app"
