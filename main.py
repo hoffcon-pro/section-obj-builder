@@ -161,6 +161,14 @@ def _key(pt: tuple[float, float], ndigits: int = 8) -> tuple[float, float]:
     return (round(pt[0], ndigits), round(pt[1], ndigits))
 
 
+def _signed_area(points: Sequence[tuple[float, float]]) -> float:
+    area = 0.0
+    for idx, (x1, y1) in enumerate(points):
+        x2, y2 = points[(idx + 1) % len(points)]
+        area += (x1 * y2) - (x2 * y1)
+    return area / 2.0
+
+
 def _polygon_from_geometry(geom: Geometry) -> Polygon:
     if not isinstance(geom.geom, Polygon):
         raise ValueError("Expected section geometry to be a single polygon.")
@@ -309,8 +317,12 @@ def _extruded_obj(
         p1_0, p1_1 = ensure_point(p1)
         p2_0, p2_1 = ensure_point(p2)
 
-        faces.append((p0_0, p1_0, p2_0))
-        faces.append((p2_1, p1_1, p0_1))
+        if _signed_area((p0, p1, p2)) >= 0:
+            faces.append((p2_0, p1_0, p0_0))
+            faces.append((p0_1, p1_1, p2_1))
+        else:
+            faces.append((p0_0, p1_0, p2_0))
+            faces.append((p2_1, p1_1, p0_1))
 
     return vertices, faces
 
